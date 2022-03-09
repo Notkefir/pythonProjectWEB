@@ -2,18 +2,31 @@ from flask import Flask, render_template, make_response, request, jsonify
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
 
-from data import db_session, news_api
+from data import db_session, news_api, news_resource
 from data.news import News
 from data.users import User
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 
 from forms.news import NewsForm
 from forms.user import LoginForm, RegisterForm
+from flask_restful import reqparse, abort, Api, Resource
 
 app = Flask(__name__)
+
+
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+# Restful-API
+api = Api(app)
+
+# для списка объектов
+api.add_resource(news_resource.NewsListResource, '/api/v2/news')
+
+# для одного объекта
+api.add_resource(news_resource.NewsResource, '/api/v2/news/<int:news_id>')
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -147,11 +160,15 @@ def news_delete(id):
         abort(404)
     return redirect('/')
 
-@app.errorhandler(404)
-def not_found(error):
-    return make_response(jsonify({'error': 'Not found'}), 404)
+
+# @app.errorhandler(404)
+# def not_found(error):
+#     return make_response(jsonify({'error': 'Not found'}), 404)
+
+
+
 
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
-    app.register_blueprint(news_api.blueprint)
+    # app.register_blueprint(news_api.blueprint)
     app.run(port=8080, host='127.0.0.1')
