@@ -4,3 +4,5 @@ flask-wtf
 flask
 sqlalchemy
 sqlalchemy_serializer
+waitress
+markupsafe
