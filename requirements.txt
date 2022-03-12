@@ -3,3 +3,4 @@ flask-restful
 flask-wtf
 flask
 sqlalchemy
+sqlalchemy_serializer
