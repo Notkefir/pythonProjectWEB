@@ -1,7 +1,9 @@
+import os
+
 from flask import Flask, render_template, make_response, request, jsonify
 from werkzeug.exceptions import abort
 from werkzeug.utils import redirect
-
+from waitress import serve
 from data import db_session, news_api, news_resource
 from data.news import News
 from data.users import User
@@ -171,4 +173,8 @@ def news_delete(id):
 if __name__ == '__main__':
     db_session.global_init("db/blogs.db")
     # app.register_blueprint(news_api.blueprint)
-    app.run(port=8080, host='127.0.0.1')
+    # app.run(port=8080, host='127.0.0.1')
+    port = int(os.environ.get("PORT", 5000))
+    # app.run(host='0.0.0.0', port=port)
+    #app.run(host='0.0.0.0', port=port)
+    serve(app, host='0.0.0.0', port=port)

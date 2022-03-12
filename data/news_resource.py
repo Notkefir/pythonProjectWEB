@@ -52,8 +52,6 @@ class NewsListResource(Resource):
 
 
 def abort_if_news_not_found(news_id):
-    if isinstance(news_id, int):
-        abort(404, message=f"News {news_id} is not int")
     session = db_session.create_session()
     news = session.query(News).get(news_id)
     if not news:
